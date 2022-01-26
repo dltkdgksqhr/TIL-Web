@@ -43,10 +43,10 @@ public class MemberServlet extends HttpServlet {
 			 vo.setPwd(_pwd);
 			 vo.setName(_name);
 			 vo.setEmail(_email);
-		} /*else if (command != null && command.equals("delMember")) {
+		} else if (command != null && command.equals("delMember")) {
 			String id = request.getParameter("id");
-//			dao.delMember(id);
-		}*/
+		dao.delMember(id);
+		}
 		
 		List list = dao.listMembers();
 		out.print("<html><body>");

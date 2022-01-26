@@ -91,14 +91,29 @@ public class MemberDAO {
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
-		}
-    	
-    	
-    	
+		}	
     	
     }
 
+    public void delMember(String id) {
+		try {
+			con = dataFactory.getConnection();
+			String query = "delete from t_member" + " where id=?";
+			System.out.println("prepareStatement:" + query);
+			
+			pstmt=con.prepareStatement(query);
+			pstmt.setString(1, id);
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 		
 	}
 	
+
