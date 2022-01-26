@@ -2,9 +2,7 @@ package sec02.ex02;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -43,9 +41,10 @@ public class MemberServlet extends HttpServlet {
 			 vo.setPwd(_pwd);
 			 vo.setName(_name);
 			 vo.setEmail(_email);
-		} else if (command != null && command.equals("delMember")) {
+			 dao.addMember(vo);
+		} else if (command!= null && command.equals("delMember")) {
 			String id = request.getParameter("id");
-		dao.delMember(id);
+		   dao.delMember(id);
 		}
 		
 		List list = dao.listMembers();

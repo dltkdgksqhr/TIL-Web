@@ -2,17 +2,14 @@ package sec02.ex02;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class MemberDAO {
@@ -69,9 +66,7 @@ public class MemberDAO {
 		return list;
 	}
 
-    public void addMember(MemberVO memberVO) {
-    
-    	
+	public void addMember(MemberVO memberVO) {
     	try {
     		con = dataFactory.getConnection();
 			String id = memberVO.getId();
@@ -88,6 +83,7 @@ public class MemberDAO {
 			pstmt.setString(3, name);
 			pstmt.setString(4, email);
 			pstmt.executeUpdate();
+			pstmt.close();
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
