@@ -1,4 +1,4 @@
-package sec02.ex02;
+package sec03.ex03;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 public class MemberDAO {
 	
+	
 	private Connection con;
 	private PreparedStatement pstmt;
 	private DataSource dataFactory;
@@ -28,8 +29,8 @@ public class MemberDAO {
 		}
 	}
 
-	public List<MemberVO> listMembers() {
-		List<MemberVO> list = new ArrayList<MemberVO>();
+	public List listMembers() {
+		List list = new ArrayList();
 		try {
 			// connDB();
 			con = dataFactory.getConnection();
