@@ -1,4 +1,4 @@
-package sec02.ex01;
+package sec03.ex01;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 //@WebServlet("/first")
 public class FirstServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	  request.setCharacterEncoding("utf-8");
 	  response.setContentType("text/html;charset=utf-8");
-	RequestDispatcher dispatch = request.getRequestDispatcher("second?name=lee");
-	dispatch.forward(request, response);
+	  request.setAttribute("address", "서울시 성북구");
+	  response.sendRedirect("second");
+	  
   }
 
 }

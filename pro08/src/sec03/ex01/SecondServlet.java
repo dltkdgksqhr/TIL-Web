@@ -1,4 +1,4 @@
-package sec02.ex01;
+package sec03.ex01;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,11 +12,11 @@ public class SecondServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		  response.setContentType("text/html;charset=utf-8");
 		  PrintWriter out = response.getWriter();
-		  String name= request.getParameter("name");
+		  String address= (String)request.getAttribute("name");
 		  out.println("<html><body>");
-		  out.println("이름 : " + name);
+		  out.println("주소 : " + address);
 		  out.println("<br>");
-		  out.println("dispatch를 이용한 forward 실습입니다.");
+		  out.println("redirect를 이용한 바인딩 실습입니다.");
 		  out.println("</html></body>");
 	  }
 }
