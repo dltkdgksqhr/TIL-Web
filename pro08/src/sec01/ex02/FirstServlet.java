@@ -1,4 +1,4 @@
-package sec01.ex01;
+package sec01.ex02;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +13,7 @@ public class FirstServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	  response.setContentType("text/html;charset=utf-8");
 	  PrintWriter out = response.getWriter();
-	  response.sendRedirect("second");
+	  response.addHeader("Refresh","1;url=second");
   }
 
 }

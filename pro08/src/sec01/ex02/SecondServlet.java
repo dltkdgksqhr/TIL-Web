@@ -1,4 +1,4 @@
-package sec01.ex01;
+package sec01.ex02;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +13,7 @@ public class SecondServlet extends HttpServlet {
 		  response.setContentType("text/html;charset=utf-8");
 		  PrintWriter out = response.getWriter();
 		  out.println("<html><body>");
-		  out.println("sendRedirect를 이용한 redirect 실습입니다.");
+		  out.println("refresh를 이용한 redirect 실습입니다.");
 		  out.println("</html></body>");
 	  }
 }
