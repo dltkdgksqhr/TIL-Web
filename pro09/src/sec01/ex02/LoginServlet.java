@@ -1,7 +1,8 @@
-package sec01.ex01;
+package sec01.ex02;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//@WebServlet("/login2")
+@WebServlet("/login2")
 public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		  request.setCharacterEncoding("utf-8");
@@ -33,7 +34,14 @@ public class LoginServlet extends HttpServlet {
 		  data +="<br>";
 		  data +="휴대전화 : " + user_hp;
 		  data +="</html></body>";
+		  data +="<br>";
 		  out.print(data);
-	
+		  
+		  user_address=URLEncoder.encode(user_address,"utf-8");
+		  out.print("<a href='/pro09/second?user_id=" + user_id 
+				  + "&user_pw=" + user_pw+ 
+				  "&user_address=" + user_address +"'>두 번째 서블릿으로 보내기</a>");
+		 data="</body></html>";
+		 out.print(data);
 	  }
 }
