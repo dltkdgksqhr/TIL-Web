@@ -1,4 +1,4 @@
-package sec03.ex01;
+package sec03.ex02;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/sess2")
-public class SessionTest extends HttpServlet{
+@WebServlet("/sess")
+public class SessionTest2 extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		  request.setCharacterEncoding("UTF-8");
 		  response.setContentType("text/html;charset=utf-8");
@@ -23,8 +23,6 @@ public class SessionTest extends HttpServlet{
 		  out.println("세션 아이디 : " + session.getId() + "<br>");
 		  out.println("최초 세션 생성 시각: " + new Date (session.getCreationTime()) + "<br>");
 		  out.println("최근 세션 접근 시각 : " + new Date(session.getLastAccessedTime()) + "<br>");
-		  out.println("기본 세션 유효 시간 : " + session.getMaxInactiveInterval() + "<br>");
-		  session.setMaxInactiveInterval(5);
 		  out.println("세션 유효 시간 : " + session.getMaxInactiveInterval() + "<br>");
 		  if(session.isNew()) {
 			  out.print("새 세션이 만들어졌습니다.");
