@@ -1,4 +1,4 @@
-package sec03.ex04;
+package sec04.ex01;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//@WebServlet("/login5")
-public class SessionTest4 extends HttpServlet{
+@WebServlet("/login5")
+public class SessionTest5 extends HttpServlet{
 	protected void doGet(HttpServletRequest request,HttpServletResponse response)  throws ServletException, IOException{
 	     doHandle(request, response);
 	   }
@@ -36,7 +36,8 @@ public class SessionTest4 extends HttpServlet{
 		  if(session.isNew()) {
 			  if(user_id != null) {
 				  session.setAttribute("user_id", user_id);
-				  out.println("<a href='login5'>로그인 상태 확인</a>");
+				  String url = response.encodeUrl("login5");
+				  out.println("<a href="+url+">로그인 상태 확인</a>");
 				  
 			  }else {
 				  out.print("<a href='login2.html'>다시 로그인하세요!!</a>");
