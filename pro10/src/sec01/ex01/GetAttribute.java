@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet("/get2")
 public class GetAttribute extends HttpServlet {
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		  request.setCharacterEncoding("utf-8");
 		  response.setContentType("text/html;charset=utf-8");
 		  PrintWriter out = response.getWriter();

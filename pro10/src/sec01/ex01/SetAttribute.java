@@ -13,8 +13,7 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet("/set2")
 public class SetAttribute extends HttpServlet {
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		  request.setCharacterEncoding("utf-8");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		  response.setContentType("text/html;charset=utf-8");
 		  PrintWriter out = response.getWriter();
 		  String ctxMesg = "context에 바인딩됩니다.";
