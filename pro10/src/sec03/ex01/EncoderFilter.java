@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter("/*")
+//@WebFilter("/*")
 public class EncoderFilter implements Filter {
    ServletContext context;
  
@@ -33,7 +33,11 @@ public class EncoderFilter implements Filter {
 		String realPath = request.getRealPath(pathinfo);
 		String mesg = " Context 정보:" + context + "\n URI 정보 : " + pathinfo + "\n 물리적 경로: " + realPath;
 		System.out.println(mesg);
+		long begin = System.currentTimeMillis();
 		chain.doFilter(request, response);
+		
+		long end = System.currentTimeMillis();
+		System.out.println("작업 시간:" +(end-begin)+"ms");
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
