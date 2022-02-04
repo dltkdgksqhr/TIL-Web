@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/login9")
+@WebServlet("/login11")
 public class LoginTest extends HttpServlet {
-	ServletContext context=null;
+	ServletContext context = null;
 	List user_list = new ArrayList();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class LoginTest extends HttpServlet {
 		if(session.isNew()) {
 			session.setAttribute("loginUser", loginUser);
 			user_list.add(user_id);
-			context.setAttribute("user_list",user_list);
+			context.setAttribute("user_list", user_list);
 		}
 
 		out.print("<html><body>");
@@ -41,7 +41,7 @@ public class LoginTest extends HttpServlet {
 		for(int i=0; i<list.size();i++) {
 			out.println(list.get(i)+"<br>");
 		}
-		out.print("<a href='logout?user_id=" + user_id +"'>로그아웃 </a>");
+		out.print("<a href='logout3?user_id=" + user_id +"'>로그아웃 </a>");
 		out.print("</body>");
 		out.print("</html>");
 	}
