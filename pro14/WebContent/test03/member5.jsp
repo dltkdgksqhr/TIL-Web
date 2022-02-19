@@ -8,7 +8,7 @@
    %>
   <c:set var="id" value="hong" scope="page"/>
   <c:set var="pwd" value="1234" scope="page"/>
-<%--   <c:set var="name" value="${'홍길동' }" scope="page"/> --%>
+  <c:set var="name" value="${'홍길동' }" scope="page"/>
   <c:set var="age" value="${22 }" scope="page"/>
   <c:set var="height" value="${177 }" scope="page"/>
 <!DOCTYPE html>
