@@ -15,18 +15,19 @@ function fn_process(){
       success:function (data,textStatus){
          $('#message').append(data);
       },
-      error:function(data,textStatus){
-         alert("에러가 발생했습니다.");ㅣ
+      error:function(data,status,error){
+    	  alert("에러발생했습니다");
+ 
       },
       complete:function(data,textStatus){
          alert("작업을완료 했습니다");
       }
    });	
-}	
+}		
 </script>
 </head>
 <body>
-  <input type="button" value="전송하기" onClick="fn_process()"/><br><br>
-  <div id="message"></div>
+  <input type="button" value="전송하기" onClick="fn_process()" /><br><br>
+<div id="message"></div>
 </body>
 </html>
