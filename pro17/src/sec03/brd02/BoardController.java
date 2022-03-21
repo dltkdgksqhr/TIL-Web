@@ -19,6 +19,7 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.RequestContext;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 
 @WebServlet("/board/*")
 public class BoardController extends HttpServlet {
@@ -99,7 +100,7 @@ private Map<String, String> upload(HttpServletRequest request, HttpServletRespon
     
     List items;
 	try {
-		items = upload.parseRequest((RequestContext) request);
+		items = upload.parseRequest(new ServletRequestContext(request));
 		for(int i=0; i < items.size(); i++) {
 	    	  FileItem fileItem = (FileItem) items.get(i);
 	    	  if(fileItem.isFormField()) {

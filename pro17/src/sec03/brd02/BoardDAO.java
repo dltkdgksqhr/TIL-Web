@@ -99,7 +99,7 @@ public class BoardDAO {
 		 String id = article.getId();
 		 String imageFileName = article.getImageFileName();
 		 String query = "insert into t_board (articleNO, parentNO, title, content, imageFileName, id)" +
-		                " values (?, ?, ?,? ,?)";
+		                " values (?, ?, ?,? ,?,?)";
 		 System.out.println(query);
 		 pstmt = conn.prepareStatement(query);
 		 pstmt.setInt(1, articleNO);
