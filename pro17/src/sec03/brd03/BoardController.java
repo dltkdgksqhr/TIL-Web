@@ -1,7 +1,8 @@
-package sec03.brd02;
+package sec03.brd03;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.apache.tomcat.util.http.fileupload.RequestContext;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 
-//@WebServlet("/board/*")
+@WebServlet("/board/*")
 public class BoardController extends HttpServlet {
 	private static String ARTICLE_IMAGE_REPO = "C:\\board\\article_image"; // 글에 첨부한 이미지 저장 위치를 상수로 선언합니다.
 	BoardService boardService;
@@ -64,6 +66,7 @@ public class BoardController extends HttpServlet {
 		} else if (action.equals("/articleForm.do")) { // action 값 /articleForm.do로 요청 시 글쓰기창이 나타납니다.
 			nextPage = "/board02/articleForm.jsp";
 		} else if (action.equals("/addArticle.do")) { // /addAticle.do로 요청 시 새글 추가 작업을 수행합니다.
+		  int articleNO=0;
 		  Map<String, String> articleMap;
 		  articleMap = upload(request, response); // 파일 업로드 기능을 사용하기 위해 upload()로 요청을 전달합니다.
 		  String title = articleMap.get("title");
@@ -75,6 +78,20 @@ public class BoardController extends HttpServlet {
 		  articleVO.setTitle(title);
 		  articleVO.setContent(content);
 		  articleVO.setImageFileName(imageFileName);
+		  articleNO = boardService.addArticle(articleVO); // 테이블에 새 글을 추가한 후 새글에 대한 글 번호를 가져옵니다.
+		  
+		  if(imageFileName != null && imageFileName.length() != 0) { // 파일을 첨부한 경우에만 수행합니다.
+			File srcFile = new File(ARTICLE_IMAGE_REPO + "\\" + "temp" + "\\" + imageFileName); // temp폴더에 임시로 업로드된 파일 객체를 생성합니다.
+			File destDir = new File(ARTICLE_IMAGE_REPO + "\\" + articleNO); //CURR_IMAGE_REPO_PATH의 경로 하위에 글 번호로 폴더를 생성합니다.
+			destDir.mkdirs();
+			FileUtils.moveFileToDirectory(srcFile, destDir, true); //temp폴더의 파일을 글 번호를 이름으로 하는 폴더로 이동시킵니다.
+		  }
+		  PrintWriter pw =response.getWriter();
+		  pw.print("<script>"
+				  +" alert('새글을 추가했습니다.');"
+		          +" location.href='"+request.getContextPath()+"/board/listArticles.do';"
+		          +"</script>"); // 새 글 등록 메시지를 나타낸 후 자바스크립트 location 객체의 href속성을 이용해 글 목록을 요청합니다.
+		  return;
 		  boardService.addArticle(articleVO); // 글쓰기창에서 입력된 정보를 article VO 객체에 설정한 후 addArticle()로 전달합니다.
 		  nextPage = "/board/listArticles.do";
 		} else {
@@ -118,7 +135,7 @@ private Map<String, String> upload(HttpServletRequest request, HttpServletRespon
 	    		  String fileName = fileItem.getName().substring(idx + 1);
 	    		  System.out.println("파일명 : " + fileName);
 	    		  articleMap.put(fileItem.getFieldName(), fileName);  // 업로드된 파일의 이름을 Map에 ("imageFileName","업로드 파일이름")로 저장합니다.
-	    		  File uploadFile = new File(currentDirPath + "\\" + fileName);
+	    		  File uploadFile = new File(currentDirPath + "\\temp\\" + fileName);
 	    		  fileItem.write(uploadFile);
 	    		} //end if
 	    	  }// end if
