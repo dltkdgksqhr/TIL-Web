@@ -1,4 +1,4 @@
-package sec03.brd03;
+package sec03.brd04;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 
-//@WebServlet("/board/*")
+@WebServlet("/board/*")
 public class BoardController extends HttpServlet {
 	private static String ARTICLE_IMAGE_REPO = "C:\\board\\article_image"; // 글에 첨부한 이미지 저장 위치를 상수로 선언합니다.
 	BoardService boardService;
@@ -58,13 +58,13 @@ public class BoardController extends HttpServlet {
 		if(action==null) {
 			articlesList = boardService.listArticles();
 			request.setAttribute("articlesList", articlesList);
-			nextPage = "/board02/listArticles.jsp";
+			nextPage = "/board03/listArticles.jsp";
 		} else if(action.equals("/listArticles.do")) {  // action 값이 /listArticles.do면 전체 글을 조회합니다.
 	        articlesList = boardService.listArticles();  // 전체 글을 조회합니다.
 	        request.setAttribute("articlesList", articlesList);  //조회된 글 목록을 articlesList로 바인딩 한 후 listArticles.jsp로 포워딩합니다.
-	        nextPage = "/board02/listArticles.jsp";
+	        nextPage = "/board03/listArticles.jsp";
 		} else if (action.equals("/articleForm.do")) { // action 값 /articleForm.do로 요청 시 글쓰기창이 나타납니다.
-			nextPage = "/board02/articleForm.jsp";
+			nextPage = "/board03/articleForm.jsp";
 		} else if (action.equals("/addArticle.do")) { // /addAticle.do로 요청 시 새글 추가 작업을 수행합니다.
 		  int articleNO=0;
 		  Map<String, String> articleMap;
@@ -87,9 +87,14 @@ public class BoardController extends HttpServlet {
 		          +"</script>"); // 새 글 등록 메시지를 나타낸 후 자바스크립트 location 객체의 href속성을 이용해 글 목록을 요청합니다.
 		  boardService.addArticle(articleVO); // 글쓰기창에서 입력된 정보를 article VO 객체에 설정한 후 addArticle()로 전달합니다.
 		  nextPage = "/board/listArticles.do";
-		} else {
-		  nextPage = "/board02/listArticles.jsp";
-		}
+		} else if (action.equals("/viewArticle.do")) {
+		  String articleNO = request.getParameter("articleNO"); // 글 상세창을 요청할 경우 articleNO값을 가져옵니다.
+		  articleVO = boardService.viewArticle(Integer.parseInt(articleNO));
+		  request.setAttribute("article",articleVO); //articleNO에 대한 글 정보를 조회하고 article 속성으로 바인딩합니다.
+		  nextPage = "/board03/viewArticle.jsp";
+		} else {		
+		  nextPage = "/board03/listArticles.jsp";
+	   }
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
 		dispatch.forward(request, response);
 	} catch (Exception e) {
