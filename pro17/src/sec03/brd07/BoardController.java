@@ -1,4 +1,4 @@
-package sec03.brd06;
+package sec03.brd07;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -27,7 +28,7 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 
-//@WebServlet("/board/*")
+@WebServlet("/board/*")
 public class BoardController extends HttpServlet {
 	private static String ARTICLE_IMAGE_REPO = "C:\\board\\article_image"; // 글에 첨부한 이미지 저장 위치를 상수로 선언합니다.
 	BoardService boardService;
@@ -53,6 +54,7 @@ public class BoardController extends HttpServlet {
 	String nextPage ="";	
 	request.setCharacterEncoding("utf-8");
 	response.setContentType("text/html;charset=utf-8");
+	HttpSession session; //답글에 대한 부모 글 번호를 저장하기 위해 세션을 사용합니다.
 	String action = request.getPathInfo(); //URL에서 요청명을 가져옵니다.
 	System.out.println("action: " + action);
 	
@@ -62,13 +64,13 @@ public class BoardController extends HttpServlet {
 		if(action==null) {
 			articlesList = boardService.listArticles();
 			request.setAttribute("articlesList", articlesList);
-			nextPage = "/board05/listArticles.jsp";
+			nextPage = "/board06/listArticles.jsp";
 		} else if(action.equals("/listArticles.do")) {  // action 값이 /listArticles.do면 전체 글을 조회합니다.
 	        articlesList = boardService.listArticles();  // 전체 글을 조회합니다.
 	        request.setAttribute("articlesList", articlesList);  //조회된 글 목록을 articlesList로 바인딩 한 후 listArticles.jsp로 포워딩합니다.
-	        nextPage = "/board05/listArticles.jsp";
+	        nextPage = "/board06/listArticles.jsp";
 		} else if (action.equals("/articleForm.do")) { // action 값 /articleForm.do로 요청 시 글쓰기창이 나타납니다.
-			nextPage = "/board05/articleForm.jsp";
+			nextPage = "/board06/articleForm.jsp";
 		} else if (action.equals("/addArticle.do")) { // /addAticle.do로 요청 시 새글 추가 작업을 수행합니다.
 		  int articleNO=0;
 		  Map<String, String> articleMap;
@@ -90,12 +92,12 @@ public class BoardController extends HttpServlet {
 		          +" location.href='"+request.getContextPath()+"/board/listArticles.do';"
 		          +"</script>"); // 새 글 등록 메시지를 나타낸 후 자바스크립트 location 객체의 href속성을 이용해 글 목록을 요청합니다.
 		  boardService.addArticle(articleVO); // 글쓰기창에서 입력된 정보를 article VO 객체에 설정한 후 addArticle()로 전달합니다.
-		  nextPage = "/board05/listArticles.do";
+		  nextPage = "/board06/listArticles.do";
 		} else if (action.equals("/viewArticle.do")) {
-		  String articleNO = request.getParameter("articleNO"); // 글 상세창을 요청할 경우 articleNO값을 가져옵니다.
+			String articleNO = request.getParameter("articleNO"); // 글 상세창을 요청할 경우 articleNO값을 가져옵니다.
 		  articleVO = boardService.viewArticle(Integer.parseInt(articleNO));
 		  request.setAttribute("article",articleVO); //articleNO에 대한 글 정보를 조회하고 article 속성으로 바인딩합니다.
-		  nextPage = "/board05/viewArticle.jsp";
+		  nextPage = "/board06/viewArticle.jsp";
 		} else if (action.equals("/modArticle.do")) {
 		Map<String, String> articleMap = upload(request, response);
 		int articleNO = Integer.parseInt(articleMap.get("articleNO"));
@@ -138,8 +140,37 @@ public class BoardController extends HttpServlet {
 			        + request.getContextPath() + "/board/listArticles.do';"
 			        + "</script>");
 			return;
-				}else {		
-		  nextPage = "/board05/listArticles.jsp";
+		}else if (action.equals("/rplyForm.do")) {
+	    int parentNO = Integer.parseInt(request.getParameter("parentNO"));
+	    session = request.getSession();
+	    session.setAttribute("parentNO", parentNO); // 답글창 요청 시 미리 부모 글 번호를 parentNO속성으로 세션에 저장합니다.
+	    nextPage = "/board06/replyForm.jsp";
+				}else if (action.equals("/addReply.do")) {
+		session = request.getSession();
+		int parentNO = (Integer) session.getAttribute("parentNO");
+		session.removeAttribute("parentNO"); // 답글 전송 시 세션에 저장된 parentNO를 가져옵니다.
+		Map<String, String> articleMap = upload(request, response);
+		String title = articleMap.get("title");
+		String content = articleMap.get("content");
+		String imageFileName = articleMap.get("imageFileName");
+		articleVO.setParentNO(parentNO); // 답글의 부모 글 번호를 설정합니다.
+		articleVO.setId("lee"); // 답글 작성자 ID를 Lee로 설정합니다.
+		articleVO.setTitle(title);
+		articleVO.setContent(content);
+		articleVO.setImageFileName(imageFileName);
+		int articleNO = boardService.addReply(articleVO); // 답글을 테이블에 추가합니다.
+     	if (imageFileName != null && imageFileName.length() != 0) {
+		 Path srcFile = Paths.get(ARTICLE_IMAGE_REPO + "\\" + "temp" + "\\" + imageFileName);
+		 Path destDir = Paths.get(ARTICLE_IMAGE_REPO + "\\" + articleNO);
+		 File destDir2 = new File(ARTICLE_IMAGE_REPO + "\\" + articleNO);
+		 destDir2.mkdirs();
+		 Files.move(srcFile, destDir, StandardCopyOption.REPLACE_EXISTING);  //답글에 첨부한 이미지를 temp폴더에서 답글 번호 폴더로 이동합니다.
+		}
+		PrintWriter pw = response.getWriter();
+		pw.print("<script>" + "  alert('답글을 추가했습니다.');" + " location.href='" + request.getContextPath()
+		        + "/board/viewArticle.do?articleNO="+articleNO+"';" + "</script>");
+				} else{		
+		  nextPage = "/board06/listArticles.jsp";
 	   }
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
 		dispatch.forward(request, response);
