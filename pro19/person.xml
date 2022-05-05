@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+                             "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+ <beans>
+   <bean id="personService" class="com.spring.ex01.PersonServiceImpl"> <!-- Bean 태그를 이용해 PersonServiceImpl 객체(빈)를 생성한 후 빈 id를 personService로 지정합니다. -->
+     <property name="name">
+     	<value>홍길동</value>
+	 </property> <!-- PersonServiceImpl 객체의 속성 name값을 <value>태그를 이용해 '홍길동'으로 초기화 합니다. -->
+   </bean>
+ </beans>
