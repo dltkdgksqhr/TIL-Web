@@ -40,13 +40,22 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     </property>
   </bean> <!-- methodNameResolver 프로퍼티에 usermethodNameResolver를 주입해서 지정한 요청명에 대해 직접 메서드를 호출하게 합니다. -->
   
-  <bean id="userMethodNameResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+ <!--  <bean id="userMethodNameResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
     <property name="mappings">
       <props>
         <prop key="/test/login.do">login</prop>
       </props>
     </property>
-  </bean> <!-- PropertiesMethodNameResolver를 이용해 /test/login.do로 요청하면 userController의 login메서드를 호출합니다. -->
+  </bean> --> <!-- PropertiesMethodNameResolver를 이용해 /test/login.do로 요청하면 userController의 login메서드를 호출합니다. -->
+  
+  <bean id="userMethodNameResolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+    <property name="mappings">
+      <props>
+        <prop key="/test/login.do">login</prop>
+        <prop key="/test/memberInfo.do">memberInfo</prop><!-- URL 요청명과 메서드 이름을 동일하게하여 회원 정보를 요청합니다. -->
+      </props>
+    </property>
+  </bean>
   
 </beans>
 
