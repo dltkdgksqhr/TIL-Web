@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.board.dao.BoardDao;
 import com.example.board.dto.BoardDto;
@@ -33,4 +34,25 @@ public class MyController {
 		return "listForm"; //"listForm.jsp" 디스패치해줌.
 		
 	}
+	
+	@RequestMapping("/writeForm")
+	public String writeFrom() {
+		return "writeForm"; //writeForm.jsp를 디스패치해줌
+		
+	}
+	
+	@RequestMapping("/writeAction")
+	public String writeAction(@RequestParam("board_name") String board_name, 
+							  @RequestParam("board_title") String board_title,
+							  @RequestParam("board_content") String board_content) {
+		int result= boardDao.write(board_name, board_title, board_content);
+		
+		if(result == 1) {
+			System.out.println("글쓰기 성공!");
+		} else {
+			System.out.println("글쓰기 실패!");
+		}
+		return "redirect:listForm"; //listForm으로 redirect 됨.
+	}
+	
 }

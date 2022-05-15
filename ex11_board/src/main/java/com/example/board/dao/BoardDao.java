@@ -10,5 +10,7 @@ import com.example.board.dto.BoardDto;
 public interface BoardDao {
 
 	public List<BoardDto> list();
+
+	public int write(String board_name, String board_title, String board_content);
 	
 }
