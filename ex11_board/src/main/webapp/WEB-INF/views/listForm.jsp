@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,13 +31,23 @@
       <th>조회수</th>
     </tr>
     
+    
+    <c:forEach var="dto" items="${ list }">
     <tr>
-      <td>1</td>
-      <td>홍길동</td>
-      <td>제목</td>
-      <td>날짜</td>
-      <td>3</td>
+      <td>${dto.board_idx }</td>
+      <td>${dto.board_name }</td>
+      <td>
+      <a href="contentForm?board_idx=${dto.board_idx}">${dto.board_title }</a>
+      </td>
+      <td>
+      	<c:set var="dateVar" value="${dto.board_date}"/>
+      	<fmt:formatDate value="${dateVar }" pattern="yyyy-MM-dd HH:mm:ss"/>
+      </td>
+      
+      <td>${dto.board_hit }</td>
     </tr>
+    
+    </c:forEach>
   
   	<tr>
   	  <td colspan="5"><a href="writeForm">글작성</a></td>
